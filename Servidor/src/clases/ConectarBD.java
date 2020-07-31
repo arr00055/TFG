@@ -741,6 +741,7 @@ public class ConectarBD {
 		    }
         return resultado;
 		}
+    
 /******************************************************************************/ 
     //Metodos para la tabla Menu.
     /**
@@ -1120,7 +1121,7 @@ public class ConectarBD {
     public String BuscarReservasPorComensal(int idcomensal) throws SQLException{
 	ResultSet rs = null;
         String resultado = "";
-	String sql="SELECT * FROM reserva WHERE ID_Usuario = ? ORDER BY Fecha_Reserva";
+	String sql="SELECT * FROM reserva WHERE ID_Usuario = ? ORDER BY Fecha_Reserva DESC";
 	getConexion();
 	        try {
 		PreparedStatement stm = conn.prepareStatement(sql);
@@ -1432,10 +1433,11 @@ public class ConectarBD {
 		    }
                 return resultado;
 		}
+    
     /******************************************************************************/ 
     //Metodos para la tabla Compone.
     /**
-     * Metodo InsertarSelecciona
+     * Metodo InsertarCompone
      * 
      * @param idmenu
      * @param idplato
@@ -1517,7 +1519,7 @@ public class ConectarBD {
                 return resultado;
 		}
     
-         /**
+    /**
      * Metodo BuscarComponeporIDPlato
      * Este metodo busca en la tabla selecciona
      * @param idplato
@@ -1661,13 +1663,14 @@ public class ConectarBD {
 		    }
                 return resultado;
 		}
+    
    /******************************************************************************/ 
     //Metodos para la tabla Establece.
     /**
      * Metodo InsertarEstablece
      * 
      * @param idmenu
-     * @param idalerge
+     * @param idrest
      * @throws SQLException 
      */
      public void InsertarEstablece (int idmenu, int idrest) throws SQLException{
@@ -1746,7 +1749,7 @@ public class ConectarBD {
                 return resultado;
 		}
     
-         /**
+     /**
      * Metodo BuscarEstableceporIDRestaurante
      * Este metodo busca en la tabla establece
      * @param idrest
@@ -1832,13 +1835,13 @@ public class ConectarBD {
 		}
     
      /**
-     * Metodo BuscarHabilitaporIDMenu
+     * Metodo BuscarHabilitaporIDPolitica
      * Este metodo busca en la tabla habilita
      * @param idplotic
      * @return entero con el ID_Restaurante asociado al ID_Politica con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarHabilitaporIDMenu (int idplotic) throws SQLException{
+    public int BuscarHabilitaporIDPolitica(int idplotic) throws SQLException{
 	ResultSet rs = null;
         int resultado = 0;
 	String sql="SELECT * FROM habilita WHERE ID_Politica = ?";

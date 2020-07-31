@@ -30,10 +30,9 @@ public class Probar {
             } if(vf == false && vf2 == false) {
                 System.out.println("ERROR: Usuario no existe.");
             }*/
-            String result;
-            result = conec.BuscarMesa(2,1);
-            System.out.println(result);
-           
-           
+            //String result;
+            //result = conec.BuscarMesa(2,1);
+            //System.out.println(result);
+                
     }
 }
