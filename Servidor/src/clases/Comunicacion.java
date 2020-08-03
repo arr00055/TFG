@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 
 public class Comunicacion implements Runnable {
     public static final String QUIT = "QUIT"; //Salir.
-    public static final String OK = "OK"; 
-    public static final String CRLF = "\r\n";
+    public static final String OK = "OK";     //Un OK. 
+    public static final String CRLF = "\r\n"; //CRLF. 
     Socket miSocket; 
 
     public Comunicacion(Socket sock) {
@@ -31,9 +31,11 @@ public class Comunicacion implements Runnable {
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(miSocket.getInputStream()));
 	DataOutputStream outputStream = new DataOutputStream(miSocket.getOutputStream());
         
+        //Envio un mensaje al cliente de OK cuando se conecta a modo de bienvenida para arrancar. 
         outputData=OK+CRLF;
 	outputStream.write(outputData.getBytes());
 	outputStream.flush();
+        
         while ((inputData = inputStream.readLine()) != null){
             //Procedo a leer la informacion que ha sido colocada en el flujo de entrada. 
             System.out.println("SERVIDOR HA RECIBIDO: " + inputData);
@@ -125,7 +127,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" "); 
                     String campo1 = camps[0];
                     int idcomensal = Integer.parseInt(campo1);
-                    int result = conecBD.BuscarSeleccionaPorIDComensal(idcomensal);
+                    String result = conecBD.BuscarSeleccionaPorIDComensal(idcomensal);
                     System.out.println(result);
                     outputData = String.valueOf(result)+CRLF;
                     System.out.println(outputData);
@@ -138,7 +140,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" "); 
                     String campo1 = camps[0];
                     int idalerg = Integer.parseInt(campo1);
-                    int result = conecBD.BuscarSeleccionaPorIDAlergeno(idalerg);
+                    String result = conecBD.BuscarSeleccionaPorIDAlergeno(idalerg);
                     System.out.println(result);
                     outputData = String.valueOf(result)+CRLF;
                     System.out.println(outputData);
@@ -249,6 +251,7 @@ public class Comunicacion implements Runnable {
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
+            
             if(com.equalsIgnoreCase("IM")==true){ //Insertar Menu.
                     ConectarBD conecBD = new ConectarBD();
                     conecBD.insertarMenu(param);
@@ -287,8 +290,8 @@ public class Comunicacion implements Runnable {
                     ConectarBD conecBD = new ConectarBD();
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
-                    int idmenu = Integer.parseInt(campo1);
-                    String a = conecBD.BuscarPlato(idmenu);
+                    int idplato = Integer.parseInt(campo1);
+                    String a = conecBD.BuscarPlato(idplato);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -486,7 +489,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idmenu = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarComponeporIDMenu(idmenu);
+                    String a = conecBD.BuscarComponeporIDMenu(idmenu);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -499,7 +502,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idplato = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarComponeporIDPlato(idplato);
+                    String a = conecBD.BuscarComponeporIDPlato(idplato);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -526,7 +529,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idmenu = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarDisponeporIDMenu(idmenu);
+                    String a = conecBD.BuscarDisponeporIDMenu(idmenu);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -539,7 +542,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idalerg = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarDisponeporIDAlergeno(idalerg);
+                    String a = conecBD.BuscarDisponeporIDAlergeno(idalerg);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -566,7 +569,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idmenu = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarEstableceporIDMenu(idmenu);
+                    String a = conecBD.BuscarEstableceporIDMenu(idmenu);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -579,7 +582,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarEstableceporIDRestaurante(idrest);
+                    String a = conecBD.BuscarEstableceporIDRestaurante(idrest);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -606,7 +609,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idpolitic = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarHabilitaporIDPolitica(idpolitic);
+                    String a = conecBD.BuscarHabilitaporIDPolitica(idpolitic);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -619,7 +622,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarHabilitaporIDRestaurante(idrest);
+                    String a = conecBD.BuscarHabilitaporIDRestaurante(idrest);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -627,7 +630,6 @@ public class Comunicacion implements Runnable {
 	            outputStream.flush();
             }
             
-            //
             if(com.equalsIgnoreCase("IVAL")==true){ //Insertar Valora.
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
@@ -647,7 +649,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idcomensal = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarValoraporIDUsuario(idcomensal);
+                    String a = conecBD.BuscarValoraporIDUsuario(idcomensal);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -660,7 +662,7 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
-                    int a = conecBD.BuscarValoraporIDRestaurante(idrest);
+                    String a = conecBD.BuscarValoraporIDRestaurante(idrest);
                     System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
                     System.out.println(outputData);
@@ -669,10 +671,13 @@ public class Comunicacion implements Runnable {
             }
             
             }//Fin While. 
+        
                     System.out.println("Conexion finalizada");
+                    //Se cierran los Stream y el socket. 
                     outputStream.close();
                     inputStream.close();
                     miSocket.close();
+                    
             }catch(SocketException er1){
                 System.err.println("SERVER ERROR: " + er1.getMessage());
             }catch(IOException er2){

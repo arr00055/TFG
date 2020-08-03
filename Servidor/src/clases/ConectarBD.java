@@ -327,12 +327,12 @@ public class ConectarBD {
      * Metodo BuscarSeleccionaPorIDComensal
      * Este metodo busca en la tabla selecciona
      * @param idcomensal
-     * @return entero con el ID_Alergeno asociado al usuario con el ID_Usuario con el que se busco.
+     * @return String con los ID_Alergeno asociados al usuario con el ID_Usuario con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarSeleccionaPorIDComensal(int idcomensal) throws SQLException{
+    public String BuscarSeleccionaPorIDComensal(int idcomensal) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM selecciona WHERE ID_Usuario = ?";
 	getConexion();
 	        try {
@@ -340,7 +340,7 @@ public class ConectarBD {
 		stm.setInt(1, idcomensal);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Alergeno"));
+                          resultado += (rs.getInt("ID_Alergeno")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -353,16 +353,16 @@ public class ConectarBD {
                 return resultado;
 		}
     
-         /**
+     /**
      * Metodo BuscarSeleccionaPorIDAlergeno
      * Este metodo busca en la tabla selecciona
      * @param idalergeno
-     * @return entero con el ID_Alergeno asociado al usuario con el ID_Usuario con el que se busco.
+     * @return String con los ID_Alergeno asociados al usuario con el ID_Usuario con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarSeleccionaPorIDAlergeno(int idalergeno) throws SQLException{
+    public String BuscarSeleccionaPorIDAlergeno(int idalergeno) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM selecciona WHERE ID_Alergeno = ?";
 	getConexion();
 	        try {
@@ -370,7 +370,7 @@ public class ConectarBD {
 		stm.setInt(1, idalergeno);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Usuario"));
+                          resultado += (rs.getInt("ID_Usuario")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1128,7 +1128,7 @@ public class ConectarBD {
 		stm.setInt(1, idcomensal);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                         resultado += (rs.getInt("ID_Reserva")+" "+rs.getDate("Fecha_Reserva")+" "+rs.getInt("ID_Mesa")+" "+rs.getInt("ID_Restaurante")+"\n");
+                         resultado += (rs.getInt("ID_Reserva")+" "+rs.getDate("Fecha_Reserva")+" "+rs.getInt("ID_Mesa")+" "+rs.getInt("ID_Restaurante")+"&");
                     }
                     rs.close();
                     stm.close();
@@ -1260,7 +1260,7 @@ public class ConectarBD {
 		stm.setInt(1, idhostelero);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                         resultado += (rs.getInt("ID_Restaurante")+" "+rs.getString("Nombre_Restaurante")+" "+rs.getString("Comunidad_Restaurante")+" "+rs.getString("Provincia_Restaurante")+" "+rs.getString("Localidad_Restaurante")+" "+rs.getInt("Numero_Telefono_Restaurante")+"\n");
+                         resultado += (rs.getInt("ID_Restaurante")+" "+rs.getString("Nombre_Restaurante")+" "+rs.getString("Comunidad_Restaurante")+" "+rs.getString("Provincia_Restaurante")+" "+rs.getString("Localidad_Restaurante")+" "+rs.getInt("Numero_Telefono_Restaurante")+"&");
                     }
                     rs.close();
                     stm.close();
@@ -1389,7 +1389,7 @@ public class ConectarBD {
 		stm.setInt(1, idrest);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                         resultado += (rs.getInt("ID_Mesa")+" "+rs.getBigDecimal("Coste_Asociado_NoShow")+" "+rs.getInt("Numero_Mesa")+" "+rs.getInt("Numero_Sillas")+"\n");
+                         resultado += (rs.getInt("ID_Mesa")+" "+rs.getBigDecimal("Coste_Asociado_NoShow")+" "+rs.getInt("Numero_Mesa")+" "+rs.getInt("Numero_Sillas")+"&");
                     }
                     rs.close();
                     stm.close();
@@ -1493,12 +1493,12 @@ public class ConectarBD {
      * Metodo BuscarComponeporIDMenu
      * Este metodo busca en la tabla compone
      * @param idmenu
-     * @return entero con el ID_Plato asociado al ID_Menu con el que se busco.
+     * @return String con los ID_Plato asociados al ID_Menu con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarComponeporIDMenu(int idmenu) throws SQLException{
+    public String BuscarComponeporIDMenu(int idmenu) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM compone WHERE ID_Menu = ?";
 	getConexion();
 	        try {
@@ -1506,7 +1506,7 @@ public class ConectarBD {
 		stm.setInt(1, idmenu);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Plato"));
+                          resultado += (rs.getInt("ID_Plato")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1523,12 +1523,12 @@ public class ConectarBD {
      * Metodo BuscarComponeporIDPlato
      * Este metodo busca en la tabla selecciona
      * @param idplato
-     * @return entero con el ID_Menu asociado al ID_Plato con el que se busco. 
+     * @return String con los ID_Menu asociados al ID_Plato con el que se busco. 
      * @throws SQLException 
      */
-    public int BuscarComponeporIDPlato(int idplato) throws SQLException{
+    public String BuscarComponeporIDPlato(int idplato) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM compone WHERE ID_Plato = ?";
 	getConexion();
 	        try {
@@ -1536,7 +1536,7 @@ public class ConectarBD {
 		stm.setInt(1, idplato);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Menu"));
+                          resultado += (rs.getInt("ID_Menu")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1608,12 +1608,12 @@ public class ConectarBD {
      * Metodo BuscarDisponeporIDMenu
      * Este metodo busca en la tabla compone
      * @param idmenu
-     * @return entero con el ID_Alergeno asociado al ID_Menu con el que se busco.
+     * @return String con los ID_Alergeno asociados al ID_Menu con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarDisponeporIDMenu(int idmenu) throws SQLException{
+    public String BuscarDisponeporIDMenu(int idmenu) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM dispone WHERE ID_Menu = ?";
 	getConexion();
 	        try {
@@ -1621,7 +1621,7 @@ public class ConectarBD {
 		stm.setInt(1, idmenu);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Alergeno"));
+                          resultado += (rs.getInt("ID_Alergeno")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1638,12 +1638,12 @@ public class ConectarBD {
      * Metodo BuscarDisponeporIDAlergeno
      * Este metodo busca en la tabla selecciona
      * @param idalerge
-     * @return entero con el ID_Menu asociado al ID_Plato con el que se busco. 
+     * @return String con los ID_Menu asociados al ID_Plato con el que se busco. 
      * @throws SQLException 
      */
-    public int BuscarDisponeporIDAlergeno(int idalerge) throws SQLException{
+    public String BuscarDisponeporIDAlergeno(int idalerge) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM compone WHERE ID_Alergeno = ?";
 	getConexion();
 	        try {
@@ -1651,7 +1651,7 @@ public class ConectarBD {
 		stm.setInt(1, idalerge);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Menu"));
+                          resultado += (rs.getInt("ID_Menu")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1723,12 +1723,12 @@ public class ConectarBD {
      * Metodo BuscarEstableceporIDMenu
      * Este metodo busca en la tabla establece
      * @param idmenu
-     * @return entero con el ID_Restaurante asociado al ID_Menu con el que se busco.
+     * @return String con los ID_Restaurante asociados al ID_Menu con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarEstableceporIDMenu(int idmenu) throws SQLException{
+    public String BuscarEstableceporIDMenu(int idmenu) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM establece WHERE ID_Menu = ?";
 	getConexion();
 	        try {
@@ -1736,7 +1736,7 @@ public class ConectarBD {
 		stm.setInt(1, idmenu);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Restaurante"));
+                          resultado += (rs.getInt("ID_Restaurante")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1753,12 +1753,12 @@ public class ConectarBD {
      * Metodo BuscarEstableceporIDRestaurante
      * Este metodo busca en la tabla establece
      * @param idrest
-     * @return entero con el ID_Menu asociado al ID_Restaurante con el que se busco. 
+     * @return String con los ID_Menu asociados al ID_Restaurante con el que se busco. 
      * @throws SQLException 
      */
-    public int BuscarEstableceporIDRestaurante(int idrest) throws SQLException{
+    public String BuscarEstableceporIDRestaurante(int idrest) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM compone WHERE ID_Alergeno = ?";
 	getConexion();
 	        try {
@@ -1766,7 +1766,7 @@ public class ConectarBD {
 		stm.setInt(1, idrest);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Restaurante"));
+                          resultado += (rs.getInt("ID_Restaurante")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1838,12 +1838,12 @@ public class ConectarBD {
      * Metodo BuscarHabilitaporIDPolitica
      * Este metodo busca en la tabla habilita
      * @param idplotic
-     * @return entero con el ID_Restaurante asociado al ID_Politica con el que se busco.
+     * @return String con los ID_Restaurante asociados al ID_Politica con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarHabilitaporIDPolitica(int idplotic) throws SQLException{
+    public String BuscarHabilitaporIDPolitica(int idplotic) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM habilita WHERE ID_Politica = ?";
 	getConexion();
 	        try {
@@ -1851,7 +1851,7 @@ public class ConectarBD {
 		stm.setInt(1, idplotic);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Restaurante"));
+                          resultado += (rs.getInt("ID_Restaurante")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1864,16 +1864,16 @@ public class ConectarBD {
                 return resultado;
 		}
     
-         /**
+     /**
      * Metodo BuscarHabilitaporIDRestaurante
      * Este metodo busca en la tabla establece
      * @param idrest
-     * @return entero con el ID_Politica asociado al ID_Restaurante con el que se busco. 
+     * @return String con los ID_Politica asociados al ID_Restaurante con el que se busco. 
      * @throws SQLException 
      */
-    public int BuscarHabilitaporIDRestaurante (int idrest) throws SQLException{
+    public String BuscarHabilitaporIDRestaurante (int idrest) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM habilita WHERE ID_Restaurante = ?";
 	getConexion();
 	        try {
@@ -1881,7 +1881,7 @@ public class ConectarBD {
 		stm.setInt(1, idrest);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Politica"));
+                          resultado += (rs.getInt("ID_Politica")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1953,12 +1953,12 @@ public class ConectarBD {
      * Metodo BuscarValoraporIDUsuario
      * Este metodo busca en la tabla valora
      * @param idcomensal
-     * @return entero con el ID_Restaurante asociado al ID_Usuario con el que se busco.
+     * @return String con los ID_Restaurante asociados al ID_Usuario con el que se busco.
      * @throws SQLException 
      */
-    public int BuscarValoraporIDUsuario (int idcomensal) throws SQLException{
+    public String BuscarValoraporIDUsuario (int idcomensal) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM valora WHERE ID_Usuario = ?";
 	getConexion();
 	        try {
@@ -1966,7 +1966,7 @@ public class ConectarBD {
 		stm.setInt(1, idcomensal);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Restaurante"));
+                          resultado += (rs.getInt("ID_Restaurante")+" ");
                     }
                     rs.close();
                     stm.close();
@@ -1979,16 +1979,16 @@ public class ConectarBD {
                 return resultado;
 		}
     
-         /**
+     /**
      * Metodo BuscarValoraporIDRestaurante
      * Este metodo busca en la tabla valora
      * @param idrest
-     * @return entero con el ID_Usuario asociado al ID_Restaurante con el que se busco. 
+     * @return String con los ID_Usuario asociados al ID_Restaurante con el que se busco. 
      * @throws SQLException 
      */
-    public int BuscarValoraporIDRestaurante (int idrest) throws SQLException{
+    public String BuscarValoraporIDRestaurante (int idrest) throws SQLException{
 	ResultSet rs = null;
-        int resultado = 0;
+        String resultado = "";
 	String sql="SELECT * FROM valora WHERE ID_Restaurante = ?";
 	getConexion();
 	        try {
@@ -1996,7 +1996,7 @@ public class ConectarBD {
 		stm.setInt(1, idrest);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Usuario"));
+                          resultado += (rs.getInt("ID_Usuario")+" ");
                     }
                     rs.close();
                     stm.close();

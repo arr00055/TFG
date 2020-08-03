@@ -23,9 +23,11 @@ public class Client {
         System.out.println("Lanzando Cliente");
         respuesta = bis.readLine();
         System.out.println("Cliente HA RECIBIDO: " + respuesta); //Recibimos el "OK" tras enviar el User al servidor.
-        os.write(("BVALC 14"+CRLF).getBytes());
+        os.write(("BRESVC 11"+CRLF).getBytes());
         os.flush();
         respuesta = bis.readLine();
+        //respuesta = respuesta.trim();
+        //int iTest = Integer.parseInt(respuesta);
         System.out.println("Cliente HA RECIBIDO: " + respuesta);
         //int respuesta2 = Integer.parseInt(respuesta);
         //System.out.println("Cliente HA RECIBIDO Entero: " + respuesta2);
