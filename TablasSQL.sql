@@ -1,0 +1,162 @@
+CREATE TABLE hostelero (
+ID_Usuario INTEGER PRIMARY KEY AUTO_INCREMENT, 
+Nombre VARCHAR (60) NOT NULL,
+Apellidos VARCHAR (60) NOT NULL,
+Numero_Telefono INTEGER,
+Contacto VARCHAR (60),
+Password VARCHAR (60)
+);
+
+CREATE TABLE comensal (
+ID_Usuario INTEGER PRIMARY KEY AUTO_INCREMENT, 
+Nombre VARCHAR (60) NOT NULL,
+Apellidos VARCHAR (60) NOT NULL,
+Numero_Telefono INTEGER,
+Contacto VARCHAR (60),
+Valoracion_Pos INTEGER,
+Valoracion_Neg INTEGER,
+Comunidad VARCHAR (60),
+Provincia VARCHAR (60),
+Localidad VARCHAR (60),
+Password VARCHAR (60)
+);
+
+CREATE TABLE restaurante (
+ID_Restaurante INTEGER PRIMARY KEY AUTO_INCREMENT, 
+ID_Usuario INTEGER NOT NULL,
+Nombre_Restaurante VARCHAR (60) NOT NULL,
+Comunidad_Restaurante VARCHAR (60), 
+Provincia_Restaurante VARCHAR (60), 
+Localidad_Restaurante VARCHAR (60), 
+Numero_Telefono_Restaurante INTEGER,
+CONSTRAINT FK_UsuarioRest FOREIGN KEY (ID_Usuario) REFERENCES hostelero (ID_Usuario)
+ON DELETE CASCADE
+ON UPDATE CASCADE 
+);
+
+CREATE TABLE mesas (
+ID_Mesa INTEGER AUTO_INCREMENT,
+ID_Restaurante INTEGER, 
+Coste_Asociado_NoShow DECIMAL (5,2) NOT NULL,
+Numero_Mesa INTEGER NOT NULL,
+Numero_Sillas INTEGER NOT NULL,
+CONSTRAINT PK_Mesas PRIMARY KEY (ID_Mesa, ID_Restaurante),  
+CONSTRAINT FK_RestauranteMesas FOREIGN KEY (ID_Restaurante) REFERENCES restaurante (ID_Restaurante)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE reserva (
+ID_Reserva INTEGER PRIMARY KEY AUTO_INCREMENT,
+Fecha_Reserva DATE NOT NULL,
+ID_Usuario INTEGER NOT NULL,
+ID_Mesa INTEGER NOT NULL,
+ID_Restaurante INTEGER NOT NULL,
+CONSTRAINT FK_UsuarioReserv FOREIGN KEY (ID_Usuario) REFERENCES comensal (ID_Usuario)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_MesaReserv FOREIGN KEY (ID_Mesa) REFERENCES mesas (ID_Mesa)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_RestauranteReserv FOREIGN KEY (ID_Restaurante) REFERENCES restaurante (ID_Restaurante)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE politicas (
+ID_Politica INTEGER PRIMARY KEY AUTO_INCREMENT,
+Politicas_si_no BOOLEAN,
+Usuarios_Neg_si_no BOOLEAN
+);
+
+CREATE TABLE menu (
+ID_Menu INTEGER PRIMARY KEY AUTO_INCREMENT,
+Nombre_Menu VARCHAR (60)
+);
+
+CREATE TABLE platos (
+ID_Plato INTEGER PRIMARY KEY AUTO_INCREMENT,
+Descripcion VARCHAR (100),
+Coste DECIMAL (5,2) NOT NULL,
+Nombre_Plato VARCHAR (60)
+);
+
+CREATE TABLE alergenos (
+ID_Alergeno INTEGER PRIMARY KEY AUTO_INCREMENT,
+Nombre_Alergeno VARCHAR (200)
+);
+
+CREATE TABLE valora (
+ID_Usuario INTEGER,
+ID_Restaurante INTEGER,
+CONSTRAINT PK_Valora PRIMARY KEY (ID_Usuario, ID_Restaurante),
+CONSTRAINT FK_UsuarioValora FOREIGN KEY (ID_Usuario) REFERENCES comensal (ID_Usuario)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_RestauranteValora FOREIGN KEY (ID_Restaurante) REFERENCES restaurante (ID_Restaurante)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE establece (
+ID_Menu INTEGER,
+ID_Restaurante INTEGER,
+CONSTRAINT PK_Establece PRIMARY KEY (ID_Menu, ID_Restaurante),
+CONSTRAINT FK_MenuEstablece FOREIGN KEY (ID_Menu) REFERENCES menu (ID_Menu)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_RestauranteEstablece FOREIGN KEY (ID_Restaurante) REFERENCES restaurante (ID_Restaurante)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE habilita (
+ID_Politica INTEGER,
+ID_Restaurante INTEGER,
+CONSTRAINT PK_Habilita PRIMARY KEY (ID_Politica, ID_Restaurante),
+CONSTRAINT FK_PoliticasHabilita FOREIGN KEY (ID_Politica) REFERENCES politicas (ID_Politica)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_RestauranteHabilita FOREIGN KEY (ID_Restaurante) REFERENCES restaurante (ID_Restaurante)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE compone (
+ID_Menu INTEGER,
+ID_Plato INTEGER,
+CONSTRAINT PK_Compone PRIMARY KEY (ID_Menu, ID_Plato),
+CONSTRAINT FK_MenuCompone FOREIGN KEY (ID_Menu) REFERENCES menu (ID_Menu)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_PlatoCompone FOREIGN KEY (ID_Plato) REFERENCES platos (ID_Plato)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE dispone (
+ID_Menu INTEGER,
+ID_Alergeno INTEGER,
+CONSTRAINT PK_Dispone PRIMARY KEY (ID_Menu, ID_Alergeno),
+CONSTRAINT FK_MenuDispone FOREIGN KEY (ID_Menu) REFERENCES menu (ID_Menu)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_AlergenoDispone FOREIGN KEY (ID_Alergeno) REFERENCES alergenos (ID_Alergeno)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE selecciona (
+ID_Usuario INTEGER,
+ID_Alergeno INTEGER,
+CONSTRAINT PK_Selecciona PRIMARY KEY (ID_Usuario, ID_Alergeno),
+CONSTRAINT FK_UsuarioSelecc FOREIGN KEY (ID_Usuario) REFERENCES comensal (ID_Usuario)
+ON DELETE CASCADE
+ON UPDATE CASCADE, 
+CONSTRAINT FK_AlergenoSelecc FOREIGN KEY (ID_Alergeno) REFERENCES alergenos (ID_Alergeno)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+
+

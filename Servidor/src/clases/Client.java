@@ -15,6 +15,7 @@ public class Client {
         String outputData = "";
         try {	
         InetAddress ip = InetAddress.getLocalHost();
+        System.out.println(ip);
         InetSocketAddress direccion = new InetSocketAddress(ip,PUERTO_TCP); 
         cliente = new Socket();
         cliente.connect(direccion);
@@ -23,7 +24,7 @@ public class Client {
         System.out.println("Lanzando Cliente");
         respuesta = bis.readLine();
         System.out.println("Cliente HA RECIBIDO: " + respuesta); //Recibimos el "OK" tras enviar el User al servidor.
-        os.write(("BRESVC 11"+CRLF).getBytes());
+        //os.write(("DELRESERV "+"3"+CRLF).getBytes());
         os.flush();
         respuesta = bis.readLine();
         //respuesta = respuesta.trim();

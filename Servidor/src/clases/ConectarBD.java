@@ -13,12 +13,14 @@ import java.text.ParseException;
   * @author Alejandro Romo Rivero
   */
 public class ConectarBD {
+    
     //Variables Grobales para el driver y la URL donde se encuentra la BD MySQL.
     public String DRIVER_MYSQL = "com.mysql.jdbc.Driver"; 
     public String URL_MYSQL = "jdbc:mysql://localhost:3306/appbd";
     public String USER = "root";
     public String PASS = "Jailedtable!1234";
     public Connection conn;
+    
     /*Constructor de la clase que realizara la conexion con la BD MySQL.*/
     public ConectarBD(){
             cargarDriver();
@@ -267,6 +269,30 @@ public class ConectarBD {
             }
         }
     }
+     
+     /**
+     * Metodo ActualizarPoliticas
+     * Este metodo actualiza la tabla politicas para un determinado ID_Politica
+     * @param nombrealergenos
+     * @param idalergeno
+     * @throws SQLException 
+     */
+    public void ActualizarAlergenos(String nombrealergenos,int idalergeno) throws SQLException{
+	String sql="UPDATE alergenos SET Nombre_Alergeno=? WHERE ID_Alergeno=?";
+	getConexion();
+	    try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setString(1, nombrealergenos);
+		stm.setInt(2, idalergeno);
+		stm.executeUpdate();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
 
 /******************************************************************************/ 
     //Metodos para la tabla Selecciona.
@@ -501,6 +527,36 @@ public class ConectarBD {
 		}
     
     /**
+     * Metodo BuscarComensalValorNegativo. 
+     * Este metodo busca la Valoracion Negativa de un comensal.
+     * @param idcomensal
+     * @return String con la Valoracion Negativa del comensal asociado al ID_Usuario introducido.
+     * @throws SQLException 
+     */
+    public String BuscarComensalValorNegativo(int idcomensal) throws SQLException{
+	ResultSet rs = null;
+        String resultado = "";
+	String sql="SELECT Valoracion_Neg FROM comensal WHERE ID_Usuario = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setInt(1, idcomensal);
+		rs = stm.executeQuery();
+                    while(rs.next()){//Leo mientras quede algo.
+                      resultado = (rs.getString("Valoracion_Neg"));
+                    }
+                    rs.close();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+                return resultado;
+		}
+    
+    /**
      * Metodo MostrarComensalNamePass.
      * 
      * 
@@ -570,6 +626,54 @@ public class ConectarBD {
         return resultado;
 		}
 
+     /**
+     * Metodo ActualizarVPosComensal
+     * Este metodo actualiza la valoracion Positiva de un comensal dado su ID.
+     * @param vpositivo
+     * @param idusuario
+     * @throws SQLException 
+     */
+    public void ActualizarVPosComensal(int vpositivo,int idusuario) throws SQLException{
+	String sql="UPDATE comensal SET Valoracion_Pos=? WHERE ID_Usuario=?";
+	getConexion();
+	    try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setInt(1, vpositivo);
+		stm.setInt(2, idusuario);
+		stm.executeUpdate();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+    
+    /**
+     * Metodo ActualizarVNegComensal
+     * Este metodo actualiza la valoracion Positiva de un comensal dado su ID.
+     * @param vnegativo
+     * @param idusuario
+     * @throws SQLException 
+     */
+    public void ActualizarVNegComensal(int vnegativo,int idusuario) throws SQLException{
+	String sql="UPDATE comensal SET Valoracion_Neg=? WHERE ID_Usuario=?";
+	getConexion();
+	    try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setInt(1, vnegativo);
+		stm.setInt(2, idusuario);
+		stm.executeUpdate();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+    
 /******************************************************************************/ 
     //Metodos para la tabla Hostelero.
      /**
@@ -748,16 +852,23 @@ public class ConectarBD {
      * Metodo InsertarMenu
      * 
      * @param menu
+     * @return ID del menú generado.
      * @throws SQLException 
      */
-     public void insertarMenu (String menu) throws SQLException{
+     public int insertarMenu (String menu) throws SQLException{
         ResultSet rs = null;
+        int idgenerado = 0;
         String sql = "INSERT INTO menu (Nombre_Menu) " + "VALUES(?)";
         getConexion();
         try {
             PreparedStatement stm = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             stm.setString(1, menu);
             stm.executeUpdate();
+            rs = stm.getGeneratedKeys();
+            while (rs.next()) {
+            idgenerado = rs.getInt(1);
+            System.out.println("El ID del menú generado es = " + idgenerado);
+            }  
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -767,6 +878,7 @@ public class ConectarBD {
                 System.out.println(e.getMessage());
             }
         }
+        return idgenerado;
     }
      
      /**
@@ -812,7 +924,7 @@ public class ConectarBD {
 		stm.setInt(1, idmenu);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado = (rs.getInt("ID_Menu")+" "+rs.getString("Nombre_Menu"));
+                          resultado = (rs.getInt("ID_Menu")+" "+rs.getString("Nombre_Menu")+"&");
                     }
                     rs.close();
                     stm.close();
@@ -831,11 +943,12 @@ public class ConectarBD {
      * Metodo InsertarPlato
      * 
      * @param plato
+     * @return idplatogenerado
      * @throws SQLException 
      */
-     public void insertarPlato (String plato) throws SQLException{
+     public int insertarPlato (String plato) throws SQLException{
         ResultSet rs = null;
-        //int idgenerado = 0;
+        int idgenerado = 0;
         String sql = "INSERT INTO platos (Descripcion,Coste,Nombre_Plato) " + "VALUES(?,?,?)";
         getConexion();
         try {
@@ -848,11 +961,10 @@ public class ConectarBD {
             stm.setBigDecimal(2,new BigDecimal(part2));
             stm.setString(3, part3);
             stm.executeUpdate();
-            //rs = stm.getGeneratedKeys();
-            //while (rs.next()) {
-            //idgenerado = rs.getInt(1);
-            //System.out.println("Su identificador de usuario es = " + idgenerado);
-            //}        
+            rs = stm.getGeneratedKeys();
+            while (rs.next()) {
+            idgenerado = rs.getInt(1);
+            }        
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -862,6 +974,7 @@ public class ConectarBD {
                 System.out.println(e.getMessage());
             }
         }
+        return idgenerado;
     }
      
      /**
@@ -907,7 +1020,7 @@ public class ConectarBD {
 		stm.setInt(1, idplato);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                         resultado = (rs.getString("Descripcion")+" "+rs.getBigDecimal("Coste")+" "+rs.getString("Nombre_Plato"));
+                         resultado = (rs.getBigDecimal("Coste")+" "+rs.getString("Nombre_Plato")+"&");
                     }
                     rs.close();
                     stm.close();
@@ -928,9 +1041,9 @@ public class ConectarBD {
      * @param politicas
      * @throws SQLException 
      */
-     public void insertarPoliticas (String politicas) throws SQLException{
+     public int insertarPoliticas (String politicas) throws SQLException{
         ResultSet rs = null;
-        //int idgenerado = 0;
+        int idgenerado = 0;
         String sql = "INSERT INTO politicas (Politicas_si_no,Usuarios_Neg_si_no) " + "VALUES(?,?)";
         getConexion();
         try { //Para insertar los booleanos se hace con 1 para true y 0 para false. 
@@ -941,11 +1054,11 @@ public class ConectarBD {
             stm.setString(1, part1);
             stm.setString(2, part2);
             stm.executeUpdate();
-            //rs = stm.getGeneratedKeys();
-            //while (rs.next()) {
-            //idgenerado = rs.getInt(1);
-            //System.out.println("Su identificador de usuario es = " + idgenerado);
-            //}        
+            rs = stm.getGeneratedKeys();
+            while (rs.next()) {
+            idgenerado = rs.getInt(1);
+            System.out.println("Su identificador de usuario es = " + idgenerado);
+            }        
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -955,6 +1068,7 @@ public class ConectarBD {
                 System.out.println(e.getMessage());
             }
         }
+        return idgenerado;
     }
      
      /**
@@ -1013,6 +1127,32 @@ public class ConectarBD {
                 return resultado;
 		}
 
+    /**
+     * Metodo ActualizarPoliticas
+     * Este metodo actualiza la tabla politicas para un determinado ID_Politica
+     * @param politicassino
+     * @param usuariosnegsino
+     * @param idpolitica
+     * @throws SQLException 
+     */
+    public void ActualizarPoliticas(String politicassino, String usuariosnegsino,int idpolitica) throws SQLException{
+	String sql="UPDATE politicas SET Politicas_si_no=?,Usuarios_Neg_si_no=? WHERE ID_Politica=?";
+	getConexion();
+	    try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setString(1, politicassino);
+		stm.setString(2, usuariosnegsino);
+		stm.setInt(3, idpolitica);
+		stm.executeUpdate();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+    
     /******************************************************************************/ 
     //Metodos para la tabla Reserva.
     /**
@@ -1025,8 +1165,9 @@ public class ConectarBD {
      * @throws SQLException 
      * @throws java.text.ParseException 
      */
-     public void insertarReserva (String fecha, int idusercomensal, int idmesa, int idrestaurante) throws SQLException, ParseException{
+     public int insertarReserva (String fecha, int idusercomensal, int idmesa, int idrestaurante) throws SQLException, ParseException{
         ResultSet rs = null;
+        int idgenerado = 0 ;
         //java.util.Date date = new java.util.Date();
         //java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
         Date date=Date.valueOf(fecha);//Convierte el string java en el string sql. 
@@ -1040,11 +1181,11 @@ public class ConectarBD {
             stm.setInt(3, idmesa);
             stm.setInt(4, idrestaurante);
             stm.executeUpdate();
-            //rs = stm.getGeneratedKeys();
-            //while (rs.next()) {
-            //idgenerado = rs.getInt(1);
-            //System.out.println("Su identificador de usuario es = " + idgenerado);
-            //}        
+            rs = stm.getGeneratedKeys();
+            while (rs.next()) {
+            idgenerado = rs.getInt(1);
+            System.out.println("Su identificador de reserva es: " + idgenerado);
+            }        
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -1054,6 +1195,7 @@ public class ConectarBD {
                 System.out.println(e.getMessage());
             }
         }
+        return idgenerado;
     }
      
      /**
@@ -1111,7 +1253,109 @@ public class ConectarBD {
 		    }
                 return resultado;
 		}
-         /**
+    
+     /**
+     * Metodo BuscarReservaPorFechaRestMesa
+     * Este metodo busca en la tabla reserva, la informacion asociada al ID_Reserva
+     * @param fecha
+     * @param idrest
+     * @param idmesa
+     * @return String con la informacion de la reserva del ID_Reserva introducido.
+     * @throws SQLException 
+     */
+    public String BuscarReservaPorFechaRestMesa(String fecha, int idrest, int idmesa) throws SQLException{
+	ResultSet rs = null;
+        String resultado = "";
+        Date date=Date.valueOf(fecha);//Convierte el string java en el string sql. 
+	String sql="SELECT ID_Reserva FROM reserva WHERE Fecha_Reserva = ? AND ID_Restaurante = ? AND ID_Mesa = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setDate(1, date);
+                stm.setInt(2, idrest);
+                stm.setInt(3, idmesa);
+		rs = stm.executeQuery();
+                    while(rs.next()){//Leo mientras quede algo. 
+                         resultado = (rs.getString("ID_Reserva"));
+                    }
+                    rs.close();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+                return resultado;
+		}
+    
+     /**
+     * Metodo BuscarReservaPorRestMesa
+     * Este metodo busca en la tabla reserva la reserva asociada a los campos del restaurante y la mesa dados.
+     * @param idrest
+     * @param idmesa
+     * @return String con la informacion de la reserva del ID_Reserva introducido.
+     * @throws SQLException 
+     */
+    public String BuscarReservaPorRestMesa(int idrest, int idmesa) throws SQLException{
+	ResultSet rs = null;
+        String resultado = "";
+	String sql="SELECT * FROM reserva WHERE ID_Restaurante = ? AND ID_Mesa = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setInt(1, idrest);
+                stm.setInt(2, idmesa);
+		rs = stm.executeQuery();
+                    while(rs.next()){//Leo mientras quede algo. 
+                        resultado += (rs.getInt("ID_Reserva")+" "+rs.getInt("ID_Usuario")+" "+rs.getDate("Fecha_Reserva")+"&");
+                    }
+                    rs.close();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+                return resultado;
+		}
+    
+     /**
+     * Metodo BuscarReservaPorRestMesaReserva
+     * Este metodo busca en la tabla reserva la reserva asociada a los campos del restaurante y la mesa dados.
+     * @param idrest
+     * @param idmesa
+     * @param idreserva
+     * @return String con la informacion de la reserva del ID_Reserva introducido.
+     * @throws SQLException 
+     */
+    public String BuscarReservaPorRestMesaReserva(int idrest, int idmesa, int idreserva) throws SQLException{
+	ResultSet rs = null;
+        String resultado = "";
+	String sql="SELECT * FROM reserva WHERE ID_Restaurante = ? AND ID_Mesa = ? AND ID_Reserva = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setInt(1, idrest);
+                stm.setInt(2, idmesa);
+                stm.setInt(3, idreserva);
+		rs = stm.executeQuery();
+                    while(rs.next()){//Leo mientras quede algo. 
+                        resultado += (rs.getString("ID_Usuario"));
+                    }
+                    rs.close();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+                return resultado;
+		}
+    
+    /**
      * Metodo BuscarReservasPorComensal
      * Este metodo busca en la tabla reserva, la informacion asociada al ID_Reserva
      * @param idcomensal
@@ -1141,6 +1385,28 @@ public class ConectarBD {
                 return resultado;
 		}
     
+     /**
+     * Metodo BorrarReserva
+     * Este metodo borra la reserva asociada al ID_Reserva dado
+     * @param idreserva
+     * @throws SQLException 
+     */
+    public void BorrarReserva (int idreserva) throws SQLException{
+	String sql="DELETE FROM reserva WHERE ID_Reserva = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setInt(1, idreserva);
+                stm.executeUpdate();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+    
    /******************************************************************************/ 
     //Metodos para la tabla Restaurante.
     /**
@@ -1150,7 +1416,7 @@ public class ConectarBD {
      * @param restaurante
      * @throws SQLException 
      */
-     public void insertarRestaurante(int iduserhostelero, String restaurante) throws SQLException {
+     public int insertarRestaurante(int iduserhostelero, String restaurante) throws SQLException {
        ResultSet rs = null;
         int idgenerado = 0;
         String sql = "INSERT INTO restaurante (ID_Usuario,Nombre_Restaurante,Comunidad_Restaurante,Provincia_Restaurante,Localidad_Restaurante,Numero_Telefono_Restaurante) " + "VALUES(?,?,?,?,?,?)";
@@ -1185,23 +1451,27 @@ public class ConectarBD {
                 System.out.println(e.getMessage());
             }
         }
+        return idgenerado;
     }
      
      /**
      * Metodo MostrarRestaurante
      * Este metodo realiza un select para sacar todos los valores de la tabla restaurante.
      * 
+     * @return String con todos los restaurantes en la BD.
      * @throws SQLException 
      */
-    public void MostrarRestaurante() throws SQLException{
+    public String MostrarRestaurante() throws SQLException{
         ResultSet rs = null;
+        String resultado = "";
 	getConexion();
 	    String sql="SELECT * FROM restaurante";
 	        try {
                    PreparedStatement stm = conn.prepareStatement(sql);
                    rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                      System.out.println(rs.getInt("ID_Restaurante")+" "+rs.getInt("ID_Usuario")+" "+rs.getString("Nombre_Restaurante")+" "+rs.getString("Comunidad_Restaurante")+" "+rs.getString("Provincia_Restaurante")+" "+rs.getString("Localidad_Restaurante")+" "+rs.getInt("Numero_Telefono_Restaurante"));
+                      //System.out.println(rs.getInt("ID_Restaurante")+" "+rs.getInt("ID_Usuario")+" "+rs.getString("Nombre_Restaurante")+" "+rs.getString("Comunidad_Restaurante")+" "+rs.getString("Provincia_Restaurante")+" "+rs.getString("Localidad_Restaurante")+" "+rs.getInt("Numero_Telefono_Restaurante"));
+                         resultado += rs.getInt("ID_Restaurante")+" "+rs.getInt("ID_Usuario")+" "+rs.getString("Nombre_Restaurante")+" "+rs.getString("Comunidad_Restaurante")+" "+rs.getString("Provincia_Restaurante")+" "+rs.getString("Localidad_Restaurante")+" "+rs.getInt("Numero_Telefono_Restaurante")+"&";
                                     }
                     rs.close();
                     stm.close();
@@ -1211,6 +1481,7 @@ public class ConectarBD {
 		    } catch (Exception e) {
 			e.printStackTrace();
 		    }
+        return resultado;
 		}
     
      /**
@@ -1272,8 +1543,39 @@ public class ConectarBD {
 		    }
                 return resultado;
 		}
-
     
+   /**
+     * Metodo BuscarRestaurante
+     * Este metodo busca en la tabla restaurante, la informacion asociada al ID_Restaurante
+     * @param idrestaurante
+     * @param idhostelero
+     * @return String con la informacion del restaurante.
+     * @throws SQLException 
+     */
+    public String BuscarRestaurantePorSusIDS(int idrestaurante, int idhostelero) throws SQLException{
+	ResultSet rs = null;
+        String resultado = "";
+	String sql="SELECT * FROM restaurante WHERE ID_Restaurante = ? AND ID_Usuario = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setInt(1, idrestaurante);
+                stm.setInt(2, idhostelero);
+		rs = stm.executeQuery();
+                    while(rs.next()){//Leo mientras quede algo. 
+                         resultado = (rs.getString("Nombre_Restaurante")+" "+rs.getString("Comunidad_Restaurante")+" "+rs.getString("Provincia_Restaurante")+" "+rs.getString("Localidad_Restaurante")+" "+rs.getInt("Numero_Telefono_Restaurante"));
+                    }
+                    rs.close();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+                return resultado;
+		}
+
     /******************************************************************************/ 
     //Metodos para la tabla Mesas.
     /**
@@ -1281,12 +1583,13 @@ public class ConectarBD {
      * 
      * @param mesa
      * @param idrestaurante
+     * @return 
      * @throws SQLException 
      * @throws java.text.ParseException 
      */
-     public void insertarMesas (int idrestaurante, String mesa) throws SQLException, ParseException{
-         ResultSet rs = null;
-        //int idgenerado = 0;
+     public int insertarMesas (int idrestaurante, String mesa) throws SQLException, ParseException{
+        ResultSet rs = null;
+        int idgenerado = 0;
         String sql = "INSERT INTO mesas (ID_Restaurante,Coste_Asociado_NoShow,Numero_Mesa,Numero_Sillas) " + "VALUES(?,?,?,?)";
         getConexion();
         try {
@@ -1300,11 +1603,11 @@ public class ConectarBD {
             stm.setString(3, part2);
             stm.setString(4, part3);
             stm.executeUpdate();
-            //rs = stm.getGeneratedKeys();
-            //while (rs.next()) {
-            //idgenerado = rs.getInt(1);
-            //System.out.println("Su identificador de usuario es = " + idgenerado);
-            //}        
+            rs = stm.getGeneratedKeys();
+            while (rs.next()) {
+            idgenerado = rs.getInt(1);
+            System.out.println("Su identificador de usuario es = " + idgenerado);
+            }        
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -1314,6 +1617,7 @@ public class ConectarBD {
                 System.out.println(e.getMessage());
             }
         }
+        return idgenerado;
     }
      
      /**
@@ -1434,6 +1738,70 @@ public class ConectarBD {
                 return resultado;
 		}
     
+      /**
+     * Metodo BuscarMesaPorIdRestNumMesa
+     * Este metodo busca en la tabla mesa, una mesa en concreto en un restaurante.
+     * @param idrest
+     * @param nummesa
+     * @return String con la mesa asociada al ID_Restaurante.
+     * @throws SQLException 
+     */
+    public String BuscarMesaPorIdRestNumMesa(int nummesa, int idrest) throws SQLException{
+	ResultSet rs = null;
+        String resultado = "";
+	String sql="SELECT ID_Mesa FROM mesas WHERE Numero_Mesa = ? AND ID_Restaurante = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setInt(1, nummesa);
+                stm.setInt(2, idrest);
+		rs = stm.executeQuery();
+                    while(rs.next()){//Leo mientras quede algo. 
+                         resultado = (rs.getString("ID_Mesa"));
+                    }
+                    rs.close();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+                return resultado;
+		}
+    
+     /**
+     * Metodo BuscarMesaNumMesa
+     * Este metodo busca en la tabla mesa, una mesa en concreto en un restaurante.
+     * @param nummesa
+     * @param idrest
+     * @return String con la mesa asociada al ID_Restaurante.
+     * @throws SQLException 
+     */
+    public String BuscarMesaNumMesa(int nummesa, int idrest) throws SQLException{
+	ResultSet rs = null;
+        String resultado = "";
+	String sql="SELECT * FROM mesas WHERE Numero_Mesa = ? AND ID_Restaurante = ?";
+	getConexion();
+	        try {
+		PreparedStatement stm = conn.prepareStatement(sql);
+		stm.setInt(1, nummesa);
+                stm.setInt(2, idrest);
+		rs = stm.executeQuery();
+                    while(rs.next()){//Leo mientras quede algo. 
+                         resultado = (rs.getBigDecimal("Coste_Asociado_NoShow")+" "+rs.getInt("Numero_Mesa")+" "+rs.getInt("Numero_Sillas"));
+                    }
+                    rs.close();
+                    stm.close();
+                    conn.close();
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+                return resultado;
+		}
+    
     /******************************************************************************/ 
     //Metodos para la tabla Compone.
     /**
@@ -1499,7 +1867,7 @@ public class ConectarBD {
     public String BuscarComponeporIDMenu(int idmenu) throws SQLException{
 	ResultSet rs = null;
         String resultado = "";
-	String sql="SELECT * FROM compone WHERE ID_Menu = ?";
+	String sql="SELECT ID_Plato FROM compone WHERE ID_Menu = ?";
 	getConexion();
 	        try {
 		PreparedStatement stm = conn.prepareStatement(sql);
@@ -1614,7 +1982,7 @@ public class ConectarBD {
     public String BuscarDisponeporIDMenu(int idmenu) throws SQLException{
 	ResultSet rs = null;
         String resultado = "";
-	String sql="SELECT * FROM dispone WHERE ID_Menu = ?";
+	String sql="SELECT ID_Alergeno FROM dispone WHERE ID_Menu = ?";
 	getConexion();
 	        try {
 		PreparedStatement stm = conn.prepareStatement(sql);
@@ -1729,7 +2097,7 @@ public class ConectarBD {
     public String BuscarEstableceporIDMenu(int idmenu) throws SQLException{
 	ResultSet rs = null;
         String resultado = "";
-	String sql="SELECT * FROM establece WHERE ID_Menu = ?";
+	String sql="SELECT ID_Restaurante FROM establece WHERE ID_Menu = ?";
 	getConexion();
 	        try {
 		PreparedStatement stm = conn.prepareStatement(sql);
@@ -1759,14 +2127,14 @@ public class ConectarBD {
     public String BuscarEstableceporIDRestaurante(int idrest) throws SQLException{
 	ResultSet rs = null;
         String resultado = "";
-	String sql="SELECT * FROM compone WHERE ID_Alergeno = ?";
+	String sql="SELECT ID_Menu FROM establece WHERE ID_Restaurante = ?";
 	getConexion();
 	        try {
 		PreparedStatement stm = conn.prepareStatement(sql);
 		stm.setInt(1, idrest);
 		rs = stm.executeQuery();
                     while(rs.next()){//Leo mientras quede algo. 
-                          resultado += (rs.getInt("ID_Restaurante")+" ");
+                          resultado += (rs.getInt("ID_Menu")+" ");
                     }
                     rs.close();
                     stm.close();

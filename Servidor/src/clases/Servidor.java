@@ -7,7 +7,7 @@ import java.util.*;
 public class Servidor {
      public static final int PUERTO_TCP = 5000;
      static ServerSocket server = null;
-      
+      //En caso de no tener conexion cogerá la IP 127.0.0.1
      public static void main (String[] args) throws IOException {
         System.out.println("SERVER: Lanzando servidor");
         try {	

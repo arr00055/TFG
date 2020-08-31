@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_1_gluten"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_2_crustaceo"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_3_huevos"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_4_pescado"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_5_cacahuetes"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.55" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_6_soja"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_7_lacteo"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_8_molusco"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_9_apio"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_10_mostaza"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_11_sesamo"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno11"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_12_sulfitos"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.55" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_13_altramuces"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno13"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65" />
+
+    <CheckBox
+        android:id="@+id/perfil_host_crea_alergeno_14_frutcascara"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilcomensal_alergeno14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <Button
+        android:id="@+id/perfil_host_mirest_vermenu_crearalerg_botoncreaalerg"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilhost_mirestaurante_mimenu_crearalerg_botoncrear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <Button
+        android:id="@+id/perfil_host_mirest_vermenu_crearalerg_botonactualizaalerg"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:text="@string/perfilhost_mirestaurante_mimenu_crearalerg_botonactualizar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.90" />
+</androidx.constraintlayout.widget.ConstraintLayout>

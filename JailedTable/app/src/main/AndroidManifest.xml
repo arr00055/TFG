@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jt.jailedtable">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".PerfilComensal"/>
+        <activity android:name=".PerfilHostelero"/>
+        <activity android:name=".CrearCuenta1"/>
+        <activity android:name=".CrearComensal"/>
+        <activity android:name=".CrearHostelero"/>
+        <activity android:name=".PerfilComAlergenos"/>
+        <activity android:name=".PerfilComInformacion"/>
+        <activity android:name=".PerfilComMisReservas"/>
+        <activity android:name=".PerfilComRestaurantes"/>
+        <activity android:name=".PerfilComRestInfo"/>
+        <activity android:name=".PerfilComRestInfoMenus"/>
+        <activity android:name=".PerfilComRestInfoMenusPlatos"/>
+        <activity android:name=".PerfilHosteleroCrearRest"/>
+        <activity android:name=".PerfilHosteleroMisRest"/>
+        <activity android:name=".PerfilHosteleroInfo"/>
+        <activity android:name=".PerfilHosteleroRestaurante"/>
+        <activity android:name=".PerfilHosteleroRestaurantePoliticas"/>
+        <activity android:name=".PerfilHosteleroRestauranteCreaMenu"/>
+        <activity android:name=".PerfilHosteleroRestauranteCreaMesa"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMenu"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMenuPlatos"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMesa"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMesaReservas"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMesaReservasValora"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMesaReservasValoraFin"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMenuCreaPlatos"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMenuVerPlatos"/>
+        <activity android:name=".PerfilHosteleroRestauranteVerMenuCreaAlerg"/>
+        <activity android:name=".CrearCuenta1Info">
+        </activity>
+    </application>
+
+</manifest>

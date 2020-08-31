@@ -8,9 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Comunicacion implements Runnable {
-    public static final String QUIT = "QUIT"; //Salir.
-    public static final String OK = "OK";     //Un OK. 
-    public static final String CRLF = "\r\n"; //CRLF. 
+    public static final String OK = "OK";     
+    public static final String CRLF = "\r\n"; 
     Socket miSocket; 
 
     public Comunicacion(Socket sock) {
@@ -27,35 +26,24 @@ public class Comunicacion implements Runnable {
         if (miSocket != null){
             try{
                 
-        //Flujos de datos de entrada y salida. 
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(miSocket.getInputStream()));
 	DataOutputStream outputStream = new DataOutputStream(miSocket.getOutputStream());
         
-        //Envio un mensaje al cliente de OK cuando se conecta a modo de bienvenida para arrancar. 
         outputData=OK+CRLF;
 	outputStream.write(outputData.getBytes());
 	outputStream.flush();
         
         while ((inputData = inputStream.readLine()) != null){
-            //Procedo a leer la informacion que ha sido colocada en el flujo de entrada. 
             System.out.println("SERVIDOR HA RECIBIDO: " + inputData);
-            //Comprobacion del flujo enviado, para saber si es un comando o contiene informacion adicional.
-	    String fields[] = inputData.split(" "); //Formateo COM CAMP1 CAMPN
-            //Si el flujo al ser separado, solo cuenta con un campo, es que es solo un COM.
+	    String fields[] = inputData.split(" "); 
 	    if (fields.length == 1){ 
-                //NO hay informacion adicional, solo el COM que es guardado en la entrada.
 	        com = inputData;
 	        param = null;
-                //System.out.println(com);
-            //Si el flujo al ser separado, cuenta con dos campos o mas, quiere decir que es un com con informacion adicional.
 	    }else if (fields.length >= 2){ 
-                //Extraigo el comando. 
                 com = fields[0];
-                System.out.println(com);
-                //Se extrae toda la informacion que es util y va mas allá del primer campo que es un COM.
 		param = inputData.substring(inputData.indexOf(" ")); 
-		param = param.trim(); //Limpiar los espacios. 
-            }//Fin de la comprobacion de la entrada. 
+		param = param.trim(); 
+            }
 
             if(com.equalsIgnoreCase("RC")==true){ //Regresar Comensal.
                     ConectarBD conecBD = new ConectarBD();
@@ -63,9 +51,7 @@ public class Comunicacion implements Runnable {
                     String name = camps[0];
                     String pass = camps[1];
                     Boolean a = conecBD.RegresarComensal(name,pass);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -73,14 +59,24 @@ public class Comunicacion implements Runnable {
             if(com.equalsIgnoreCase("RH")==true){ //Regresar Hostelero.
                     ConectarBD conecBD = new ConectarBD();
                     String camps[] = param.split(" ");
+                    if(camps.length==2){
                     String name = camps[0];
                     String pass = camps[1];
                     Boolean a = conecBD.RegresarHostelero(name,pass);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
+                    }
+                    if(camps.length==3){
+                    String name1 = camps[0];
+                    String name2 = camps[1];
+                    String pass = camps[2];
+                    String name = name1+" "+name2;
+                    Boolean a = conecBD.RegresarHostelero(name,pass);
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+                    }
             } 
             
             if(com.equalsIgnoreCase("BA")==true){ //Buscar Alergeno por su ID y devuelve su nombre.
@@ -89,9 +85,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idalerg = Integer.parseInt(campo1);
                     String a = conecBD.BuscarAlergeno(idalerg);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -104,7 +98,6 @@ public class Comunicacion implements Runnable {
                     int idcomensal = Integer.parseInt(campo2);
                     conecBD.insertarAlergenoComensal(campo1,idcomensal);
                     outputData = OK+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -117,7 +110,6 @@ public class Comunicacion implements Runnable {
                     int idmenu = Integer.parseInt(campo2);
                     conecBD.InsertarAlergenoMenu(campo1,idmenu);
                     outputData = OK+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -128,9 +120,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idcomensal = Integer.parseInt(campo1);
                     String result = conecBD.BuscarSeleccionaPorIDComensal(idcomensal);
-                    System.out.println(result);
                     outputData = String.valueOf(result)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -141,9 +131,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idalerg = Integer.parseInt(campo1);
                     String result = conecBD.BuscarSeleccionaPorIDAlergeno(idalerg);
-                    System.out.println(result);
                     outputData = String.valueOf(result)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -154,9 +142,7 @@ public class Comunicacion implements Runnable {
             //os.write(("IC "+comensal+CRLF).getBytes());
                     ConectarBD conecBD = new ConectarBD();
                     int b = conecBD.insertarComensal(param);
-                    System.out.println(b);
                     outputData = String.valueOf(b)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }            
@@ -167,9 +153,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idcomen = Integer.parseInt(campo1);
                     String a = conecBD.BuscarComensal(idcomen);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -180,9 +164,7 @@ public class Comunicacion implements Runnable {
                     String name = camps[0];
                     String pass = camps[1];
                     int idresult = conecBD.MostrarComensalNamePass(name,pass);
-                    System.out.println(idresult);
                     outputData = String.valueOf(idresult)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -193,9 +175,7 @@ public class Comunicacion implements Runnable {
                     String name = camps[0];
                     String pass = camps[1];
                     String result = conecBD.MostrarComensalNamePassTodo(name,pass);
-                    System.out.println(result);
                     outputData = String.valueOf(result)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -206,9 +186,7 @@ public class Comunicacion implements Runnable {
             //os.write(("IC "+hostelero+CRLF).getBytes());
                     ConectarBD conecBD = new ConectarBD();
                     int b = conecBD.insertarHostelero(param);
-                    System.out.println(b);
                     outputData = String.valueOf(b)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }  
@@ -219,9 +197,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idcomen = Integer.parseInt(campo1);
                     String a = conecBD.BuscarHostelero(idcomen);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -232,9 +208,7 @@ public class Comunicacion implements Runnable {
                     String name = camps[0];
                     String pass = camps[1];
                     int idresult = conecBD.MostrarHosteleroNamePass(name,pass);
-                    System.out.println(idresult);
                     outputData = String.valueOf(idresult)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -244,19 +218,16 @@ public class Comunicacion implements Runnable {
                     String camps[] = param.split(" ");
                     String name = camps[0];
                     String pass = camps[1];
-                    String result = conecBD.MostrarHosteleroNamePassTodo(name,pass);
-                    System.out.println(result);
+                    String result = conecBD.MostrarHosteleroNamePassTodo(name,pass);                  
                     outputData = String.valueOf(result)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
             
             if(com.equalsIgnoreCase("IM")==true){ //Insertar Menu.
                     ConectarBD conecBD = new ConectarBD();
-                    conecBD.insertarMenu(param);
-                    outputData = OK+CRLF;
-                    System.out.println(outputData);
+                    int idmenugenerado = conecBD.insertarMenu(param);
+                    outputData = String.valueOf(idmenugenerado)+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -267,9 +238,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idmenu = Integer.parseInt(campo1);
                     String a = conecBD.BuscarMenu(idmenu);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -279,9 +248,8 @@ public class Comunicacion implements Runnable {
             //String platito = "Este plato trae una chuleta de cerdo y patatas fritas-11.20-Chuleta de cerdo y patatas";;
             //os.write(("IP "+platito+CRLF).getBytes());
                     ConectarBD conecBD = new ConectarBD();
-                    conecBD.insertarPlato(param);
-                    outputData = OK+CRLF;
-                    System.out.println(outputData);
+                    int idplato = conecBD.insertarPlato(param);
+                    outputData = String.valueOf(idplato)+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -292,9 +260,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idplato = Integer.parseInt(campo1);
                     String a = conecBD.BuscarPlato(idplato);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -304,9 +270,8 @@ public class Comunicacion implements Runnable {
             //String politica = "1 - 0";
             //os.write(("IPOL "+politica+CRLF).getBytes());
                     ConectarBD conecBD = new ConectarBD();
-                    conecBD.insertarPoliticas(param);
-                    outputData = OK+CRLF;
-                    System.out.println(outputData);
+                    int idpolitica = conecBD.insertarPoliticas(param);
+                    outputData = String.valueOf(idpolitica)+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -317,9 +282,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idpolitic = Integer.parseInt(campo1);
                     String a = conecBD.BuscarPoliticas(idpolitic);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -337,12 +300,38 @@ public class Comunicacion implements Runnable {
                     int idmesa = Integer.parseInt(campo2);
                     int idrest = Integer.parseInt(campo3);
                     ConectarBD conecBD = new ConectarBD();
-                    conecBD.insertarReserva(fecha,iduser,idmesa,idrest);
-                    outputData = OK+CRLF;
-                    System.out.println(outputData);
+                    int b = conecBD.insertarReserva(fecha,iduser,idmesa,idrest);
+                    outputData = String.valueOf(b)+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
+            
+            if(com.equalsIgnoreCase("BRESVFRM")==true){ //Buscar una Reserva por su Fecha, Restaurante y Mesa. 
+                    String camps[] = param.split(" ");
+                    String fecha  = camps[0];
+                    String campo2 = camps[1];
+                    String campo3 = camps[2];
+                    int idrest = Integer.parseInt(campo2);
+                    int idmesa = Integer.parseInt(campo3);
+                    ConectarBD conecBD = new ConectarBD();
+                    String a = conecBD.BuscarReservaPorFechaRestMesa(fecha,idrest,idmesa);
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("BRESVIRIM")==true){ //Buscar Reservas por su ID Restaurante e  ID Mesa. 
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    String campo2 = camps[1];
+                    int idrest = Integer.parseInt(campo1);
+                    int idmesa = Integer.parseInt(campo2);
+                    ConectarBD conecBD = new ConectarBD();
+                    String a = conecBD.BuscarReservaPorRestMesa(idrest,idmesa);
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
             
             if(com.equalsIgnoreCase("BRESV")==true){ //Buscar una Reserva por su ID_Reserva
                     ConectarBD conecBD = new ConectarBD();
@@ -350,9 +339,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idreserv = Integer.parseInt(campo1);
                     String a = conecBD.BuscarReservasPorReserva(idreserv);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -364,7 +351,6 @@ public class Comunicacion implements Runnable {
                     int iduser = Integer.parseInt(campo1);
                     String a = conecBD.BuscarReservasPorComensal(iduser);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -379,9 +365,8 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     String restaurant = camps[1];
                     int iduserhost = Integer.parseInt(campo1);
-                    conecBD.insertarRestaurante(iduserhost,restaurant);
-                    outputData = OK+CRLF;
-                    System.out.println(outputData);
+                    int b = conecBD.insertarRestaurante(iduserhost,restaurant);
+                    outputData = String.valueOf(b)+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -392,9 +377,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
                     String a = conecBD.BuscarRestaurante(idrest);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -405,9 +388,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idhost = Integer.parseInt(campo1);
                     String a = conecBD.BuscarRestauranteIdHostelero(idhost);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -422,9 +403,8 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     String mesa = camps[1];
                     int idrestaurant = Integer.parseInt(campo1);
-                    conecBD.insertarMesas(idrestaurant,mesa);
-                    outputData = OK+CRLF;
-                    System.out.println(outputData);
+                    int idmenugenerado = conecBD.insertarMesas(idrestaurant,mesa);
+                    outputData = String.valueOf(idmenugenerado)+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -435,9 +415,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idmesa = Integer.parseInt(campo1);
                     String a = conecBD.BuscarMesas(idmesa);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -448,24 +426,46 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
                     String a = conecBD.BuscarMesasIDRest(idrest);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
             
-            if(com.equalsIgnoreCase("BMES")==true){ //Buscar una Mesa por idmesa e idrestaurante.
+            if(com.equalsIgnoreCase("BMES")==true){ //Buscar una Mesa por idmenu e idrestaurante.
                     ConectarBD conecBD = new ConectarBD();
                     String camps[] = param.split(" ");
                     String campo1 = camps[0];
                     String campo2 = camps[1];
-                    int idmesa = Integer.parseInt(campo1);
+                    int idmenu = Integer.parseInt(campo1);
                     int idrest = Integer.parseInt(campo2);
-                    String a = conecBD.BuscarMesa(idmesa,idrest);
-                    System.out.println(a);
+                    String a = conecBD.BuscarMesa(idmenu,idrest);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("BMESNR")==true){ //Buscar una Mesa por nummesa e idrestaurante.
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    String campo2 = camps[1];
+                    int nummesa = Integer.parseInt(campo1);
+                    int idrest = Integer.parseInt(campo2);
+                    String a = conecBD.BuscarMesaNumMesa(nummesa,idrest);
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("BMESNMIR")==true){ //Buscar una Mesa por nummesa e idrestaurant y obtener solo su ID_Mesa
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    String campo2 = camps[1];
+                    int nummesa = Integer.parseInt(campo1);
+                    int idrest = Integer.parseInt(campo2);
+                    String a = conecBD.BuscarMesaPorIdRestNumMesa(nummesa,idrest);
+                    outputData = String.valueOf(a)+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -479,7 +479,6 @@ public class Comunicacion implements Runnable {
                     ConectarBD conecBD = new ConectarBD();
                     conecBD.insertarCompone(idmenu, idplato);
                     outputData = OK+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -490,9 +489,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idmenu = Integer.parseInt(campo1);
                     String a = conecBD.BuscarComponeporIDMenu(idmenu);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -503,9 +500,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idplato = Integer.parseInt(campo1);
                     String a = conecBD.BuscarComponeporIDPlato(idplato);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -519,7 +514,6 @@ public class Comunicacion implements Runnable {
                     ConectarBD conecBD = new ConectarBD();
                     conecBD.InsertarDispone(idmenu, idalerg);
                     outputData = OK+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -530,9 +524,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idmenu = Integer.parseInt(campo1);
                     String a = conecBD.BuscarDisponeporIDMenu(idmenu);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -543,9 +535,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idalerg = Integer.parseInt(campo1);
                     String a = conecBD.BuscarDisponeporIDAlergeno(idalerg);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -559,7 +549,6 @@ public class Comunicacion implements Runnable {
                     ConectarBD conecBD = new ConectarBD();
                     conecBD.InsertarEstablece(idmenu, idrest);
                     outputData = OK+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -570,9 +559,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idmenu = Integer.parseInt(campo1);
                     String a = conecBD.BuscarEstableceporIDMenu(idmenu);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -583,9 +570,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
                     String a = conecBD.BuscarEstableceporIDRestaurante(idrest);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -599,7 +584,6 @@ public class Comunicacion implements Runnable {
                     ConectarBD conecBD = new ConectarBD();
                     conecBD.InsertarHabilita(idpolitic, idrest);
                     outputData = OK+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -610,9 +594,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idpolitic = Integer.parseInt(campo1);
                     String a = conecBD.BuscarHabilitaporIDPolitica(idpolitic);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -623,9 +605,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
                     String a = conecBD.BuscarHabilitaporIDRestaurante(idrest);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -639,7 +619,6 @@ public class Comunicacion implements Runnable {
                     ConectarBD conecBD = new ConectarBD();
                     conecBD.InsertarValora(idcomensal, idrest);
                     outputData = OK+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             } 
@@ -650,9 +629,7 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idcomensal = Integer.parseInt(campo1);
                     String a = conecBD.BuscarValoraporIDUsuario(idcomensal);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
@@ -663,17 +640,137 @@ public class Comunicacion implements Runnable {
                     String campo1 = camps[0];
                     int idrest = Integer.parseInt(campo1);
                     String a = conecBD.BuscarValoraporIDRestaurante(idrest);
-                    System.out.println(a);
                     outputData = String.valueOf(a)+CRLF;
-                    System.out.println(outputData);
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("MRS")==true){ //Mostrar Todos los Restaurantes.
+                    ConectarBD conecBD = new ConectarBD();
+                    String a = conecBD.MostrarRestaurante();
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("BCOMVNEG")==true){ //Buscar en Comensal el Valor Negativo dado un Usuario_ID
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    int idcomensal = Integer.parseInt(campo1);
+                    String a = conecBD.BuscarComensalValorNegativo(idcomensal);
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("BRESTPIDS")==true){ //Buscar en Restaurante por sus Ids. 
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    String campo2 = camps[1];
+                    int idrestaurante = Integer.parseInt(campo1);
+                    int idhostelero   = Integer.parseInt(campo2);
+                    String a = conecBD.BuscarRestaurantePorSusIDS(idrestaurante,idhostelero);
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("ACTP")==true){ //Actualizar políticas 
+                //Metodo funcional con la forma tal que politicassino usuariossino idpoliticas
+                //                                  con: 1 true y 0 false. 
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String politicassino = camps[0];
+                    String usuariosino   = camps[1];
+                    String campo3        = camps[2];
+                    int idpoliticas = Integer.parseInt(campo3);
+                    conecBD.ActualizarPoliticas(politicassino,usuariosino,idpoliticas);
+                    outputData = OK+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("BRESERVPIDS")==true){ //Buscar en Reserva por sus IDs, menos la ID_Usuario 
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    String campo2 = camps[1];
+                    String campo3 = camps[2];
+                    int idrestaurante = Integer.parseInt(campo1);
+                    int idmesa   = Integer.parseInt(campo2);
+                    int idreserva  = Integer.parseInt(campo3);
+                    String a = conecBD.BuscarReservaPorRestMesaReserva(idrestaurante,idmesa,idreserva);
+                    outputData = String.valueOf(a)+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("AVPCOM")==true){ //Actualizar Valoracion Positiva de Comensal
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    String campo2 = camps[1];
+                    int idvpos = Integer.parseInt(campo1);
+                    int idusuario = Integer.parseInt(campo2);
+                    conecBD.ActualizarVPosComensal(idvpos,idusuario);
+                    outputData = OK+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("AVNCOM")==true){ //Actualizar Valoracion Negativa de Comensal
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    String campo2 = camps[1];
+                    int idvpos = Integer.parseInt(campo1);
+                    int idusuario = Integer.parseInt(campo2);
+                    conecBD.ActualizarVNegComensal(idvpos,idusuario);
+                    outputData = OK+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("DELRESERV")==true){ //Borrar una Reserva dado su ID_Reserva
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split(" ");
+                    String campo1 = camps[0];
+                    int idreserva = Integer.parseInt(campo1);
+                    conecBD.BorrarReserva(idreserva);
+                    outputData = OK+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("ACTALERGH")==true){ //Actualizar alergenos por parte de hostelero (dispone e id_menu)
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split("-");
+                    String nombrealergeno = camps[0];
+                    String campo2 = camps[1];
+                    int idalergeno = Integer.parseInt(campo2);
+                    conecBD.ActualizarAlergenos(nombrealergeno,idalergeno);
+                    outputData = OK+CRLF;
+                    outputStream.write(outputData.getBytes());
+	            outputStream.flush();
+            }
+            
+            if(com.equalsIgnoreCase("ACTALERGC")==true){ //Actualizar alergenos por parte de comensal
+                    ConectarBD conecBD = new ConectarBD();
+                    String camps[] = param.split("-");
+                    String nombrealergeno = camps[0];
+                    String campo2 = camps[1];
+                    int idalergeno = Integer.parseInt(campo2);
+                    conecBD.ActualizarAlergenos(nombrealergeno,idalergeno);
+                    outputData = OK+CRLF;
                     outputStream.write(outputData.getBytes());
 	            outputStream.flush();
             }
             
             }//Fin While. 
-        
+
                     System.out.println("Conexion finalizada");
-                    //Se cierran los Stream y el socket. 
                     outputStream.close();
                     inputStream.close();
                     miSocket.close();
